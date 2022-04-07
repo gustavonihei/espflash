@@ -77,6 +77,15 @@ https://github.com/espressif/esp32c3-direct-boot-example"
         )
     )]
     InvalidDirectBootBinary,
+    #[error("binary is not setup correct to boot from MCUboot")]
+    #[diagnostic(
+        code(espflash::invalid_mcu_boot),
+        help(
+            "See the following page for documentation on how to create an MCUboot-bootable image:
+https://docs.mcuboot.com/readme-espressif.html#signing-and-flashing-an-application"
+        )
+    )]
+    InvalidMcuBootBinary,
     #[error("No serial ports could be detected")]
     #[diagnostic(
         code(espflash::no_serial),

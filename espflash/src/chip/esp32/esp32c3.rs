@@ -6,7 +6,7 @@ use crate::{
     connection::Connection,
     elf::FirmwareImage,
     error::UnsupportedImageFormatError,
-    image_format::{Esp32BootloaderFormat, Esp32DirectBootFormat, ImageFormat, ImageFormatId},
+    image_format::{Esp32BootloaderFormat, Esp32McuBootFormat, Esp32DirectBootFormat, ImageFormat, ImageFormatId},
     Chip, Error, PartitionTable,
 };
 
@@ -29,6 +29,7 @@ pub const PARAMS: Esp32Params = Esp32Params {
     app_size: 0x3f0000,
     chip_id: 5,
     default_bootloader: include_bytes!("../../../bootloader/esp32c3-bootloader.bin"),
+    default_mcuboot: Some(include_bytes!("../../../bootloader/mcuboot-esp32c3.bin")),
 };
 
 impl ChipType for Esp32c3 {
@@ -52,7 +53,7 @@ impl ChipType for Esp32c3 {
 
     const DEFAULT_IMAGE_FORMAT: ImageFormatId = ImageFormatId::Bootloader;
     const SUPPORTED_IMAGE_FORMATS: &'static [ImageFormatId] =
-        &[ImageFormatId::Bootloader, ImageFormatId::DirectBoot];
+        &[ImageFormatId::Bootloader, ImageFormatId::McuBoot, ImageFormatId::DirectBoot];
 
     const SUPPORTED_TARGETS: &'static [&'static str] = &[
         "riscv32imac-unknown-none-elf",
@@ -82,6 +83,11 @@ impl ChipType for Esp32c3 {
                 Chip::Esp32c3,
                 PARAMS,
                 partition_table,
+                bootloader,
+            )?)),
+            (ImageFormatId::McuBoot, _) => Ok(Box::new(Esp32McuBootFormat::new(
+                image,
+                PARAMS,
                 bootloader,
             )?)),
             (ImageFormatId::DirectBoot, None | Some(3..)) => {

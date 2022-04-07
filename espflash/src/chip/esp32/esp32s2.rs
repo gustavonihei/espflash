@@ -29,6 +29,7 @@ pub const PARAMS: Esp32Params = Esp32Params {
     app_size: 0x100000,
     chip_id: 2,
     default_bootloader: include_bytes!("../../../bootloader/esp32s2-bootloader.bin"),
+    default_mcuboot: None,
 };
 
 impl ChipType for Esp32s2 {

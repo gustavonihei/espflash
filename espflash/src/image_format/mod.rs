@@ -1,10 +1,12 @@
 mod esp32bootloader;
+mod esp32mcuboot;
 mod esp32directboot;
 mod esp8266;
 
 use crate::elf::RomSegment;
 use bytemuck::{Pod, Zeroable};
 pub use esp32bootloader::*;
+pub use esp32mcuboot::*;
 pub use esp32directboot::*;
 pub use esp8266::*;
 
@@ -54,6 +56,7 @@ pub trait ImageFormat<'a> {
 #[serde(rename_all = "kebab-case")]
 pub enum ImageFormatId {
     Bootloader,
+    McuBoot,
     DirectBoot,
 }
 
@@ -63,6 +66,7 @@ impl FromStr for ImageFormatId {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "bootloader" => Ok(Self::Bootloader),
+            "mcuboot" => Ok(Self::McuBoot),
             "direct-boot" => Ok(Self::DirectBoot),
             _ => Err(Error::UnknownImageFormat(s.into())),
         }

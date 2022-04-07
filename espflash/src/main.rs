@@ -14,7 +14,7 @@ use miette::{IntoDiagnostic, Result, WrapErr};
 #[clap(version, propagate_version = true)]
 struct Opts {
     /// Image format to flash
-    #[clap(long, possible_values = &["bootloader", "direct-boot"])]
+    #[clap(long, possible_values = &["bootloader", "mcuboot", "direct-boot"])]
     pub format: Option<String>,
     #[clap(flatten)]
     pub flash_config_opts: FlashConfigOpts,
@@ -41,7 +41,7 @@ pub struct SaveImageOpts {
     #[clap(flatten)]
     pub flash_config_opts: FlashConfigOpts,
     /// Image format to flash
-    #[clap(long, possible_values = &["bootloader", "direct-boot"])]
+    #[clap(long, possible_values = &["bootloader", "mcuboot", "direct-boot"])]
     format: Option<String>,
     /// the chip to create an image for
     chip: Chip,

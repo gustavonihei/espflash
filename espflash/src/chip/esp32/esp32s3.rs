@@ -5,6 +5,7 @@ use crate::{
     chip::{ChipType, ReadEFuse, SpiRegisters},
     connection::Connection,
     elf::FirmwareImage,
+    error::UnsupportedImageFormatError,
     image_format::{Esp32BootloaderFormat, Esp32DirectBootFormat, ImageFormat, ImageFormatId},
     Chip, Error, PartitionTable,
 };
@@ -28,6 +29,7 @@ pub const PARAMS: Esp32Params = Esp32Params {
     app_size: 0x100000,
     chip_id: 9,
     default_bootloader: include_bytes!("../../../bootloader/esp32s3-bootloader.bin"),
+    default_mcuboot: None,
 };
 
 impl ChipType for Esp32s3 {
@@ -80,6 +82,7 @@ impl ChipType for Esp32s3 {
                 bootloader,
             )?)),
             ImageFormatId::DirectBoot => Ok(Box::new(Esp32DirectBootFormat::new(image)?)),
+            _ => Err(UnsupportedImageFormatError::new(image_format, Chip::Esp32s3, None).into()),
         }
     }
 }

@@ -6,7 +6,7 @@ use crate::{
 };
 use std::iter::once;
 
-/// Image format for esp32 family chips using a 2nd stage bootloader
+/// Image format for ESP32 family chips that provide support for Direct Boot feature
 pub struct Esp32DirectBootFormat<'a> {
     segment: RomSegment<'a>,
 }
